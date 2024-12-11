@@ -9,6 +9,7 @@ function App() {
     const [loading, setLoading] = useState(true);
     const [liking, setLiking] = useState(false);
     const indexRef = useRef(0);
+    const favouritesRef = useRef();
 
     useEffect(() => {
         fetchFirstQuote();
@@ -41,13 +42,17 @@ function App() {
         try {
             if (!quote.liked) {
                 setLiking(true);
-                const likeCount = await quoteApi.likeQuote(quote);
-                if (likeCount > 0) {
+                const likedQoute = await quoteApi.likeQuote(quote);
+                console.log("likeQuote response=",likedQoute);
+                if (likedQoute.likes > 0) {
                     //set liked to true on the quote in the receivedQuotes array and maintain the order of the quotes
                     setReceivedQuotes(prevReceivedQuotes =>
                         prevReceivedQuotes.map((item) => item.id === quote.id ? {...item, liked: true} : item ));
 
                     setQuote({...quote, liked: true});
+                    if (favouritesRef.current) {
+                        favouritesRef.current.reloadFavouriteQuotes();
+                    }
                 } else {
                     console.log("Failed to like quote for some reason, id=" + quote.id);
                 }
@@ -117,7 +122,7 @@ function App() {
                     Last
                 </button>
             </div>
-            <FavouritesComponent/>
+            <FavouritesComponent ref={favouritesRef}/>
         </div>
     );
 }

@@ -1,8 +1,8 @@
 import './FavouritesComponent.css'
-import {useEffect, useState} from "react";
+import {forwardRef, useEffect, useImperativeHandle, useState} from "react";
 import quoteApi from "../api/quoteApi";
 
-function FavouritesComponent() {
+const FavouritesComponent = forwardRef((props, ref) => {
 
     const [quotes, setQuotes] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -10,6 +10,13 @@ function FavouritesComponent() {
     useEffect(() => {
         loadFavouriteQuotes();
     }, []);
+
+    useImperativeHandle(ref, () => ({
+        reloadFavouriteQuotes() {
+            loadFavouriteQuotes();
+            console.log('Reload Favourite Quotes');
+        }
+    }))
 
     async function loadFavouriteQuotes() {
         try {
@@ -34,6 +41,6 @@ function FavouritesComponent() {
             </div>
         </div>
     );
-}
+});
 
 export default FavouritesComponent;
