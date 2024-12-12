@@ -28,7 +28,7 @@ Implemented features:
             - Is disabled if there is no previous quote
         - Next Button
             - Shows the next quote, when there is one
-            - Is disabled if ther is no next quote
+            - Is disabled if there is no next quote
         - First
             - jumps to the first received quote
         - Last
